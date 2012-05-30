@@ -21,12 +21,16 @@ class Transition :
         self.action = ""
         self.source = ""
         self.target = ""
+
     def set_source(self, state):
         self.source = state
+
     def set_target(self, state):
         self.target = state
+
     def set_action(self, action):
         self.action = ""
+
     def set_trigger(self, trigger):
         self.trigger = trigger
 
@@ -37,20 +41,31 @@ class State :
         self.oaction = ""
         self.type = 0
         self.aux = ""
+
     def set_name(self, name):
         self.name = name
+
     def set_input_action(self, action):
         if action == "(NULL)":
             self.iaction = ""
         else:
             self.iaction = action
+
     def set_output_action(self, action):
         if action == "(NULL)":
             self.oaction = ""
         else:
             self.oaction = action
+
+    def set_do_action(self, action):
+        if action == "(NULL)":
+            self.doaction = ""
+        else:
+            self.doaction = action
+
     def set_type(self, type):
         self.type = type
+
     def set_aux(self, aux):
         self.aux = aux
 
@@ -59,32 +74,54 @@ class TxtDiagramRenderer:
         self.filename = ""
         self.states = {}
         self.transitions = []
+
     def begin_render (self, data, filename):
-       
         self.filename = filename
         for layer in data.layers :
             for o in layer.objects :
                 if o.type.name == "UML - State" :
                     state = State()
-                    # las propiedades son: ['obj_pos', 'obj_bb', 'elem_corner', 'elem_width' ,'elem_height', 'type','line_colour', 'fill_colour', 'text_font', 'text_height', 'text_colour', 'text', 'entry_action', 'do_action', 'exit_action' ]
+                    # State properties are:
+		    # [ 'obj_pos',     'obj_bb',      'elem_corner', 'elem_width',
+		    #   'elem_height', 'type',        'line_colour', 'fill_colour',
+		    #   'text_font',   'text_height', 'text_colour', 'text',
+		    #   'entry_action','do_action',   'exit_action' ]
+
+		    # ----- set name
                     state.set_name(o.properties["text"].value.text.strip())
+
+		    # ----- set input action
                     try :
                         p = o.properties["entry_action"].value
                     except :
                         p = None
                     state.set_input_action(str(p))
                      
+		    # ----- set output action
                     try :
                         p = o.properties["exit_action"].value
                     except :
                         p = None
                     state.set_output_action(str(p))
+
+		    # ----- set do action
+                    try :
+                        p = o.properties["do_action"].value
+                    except :
+                        p = None
+                    state.set_do_action(str(p))
+
                     state.set_type(STANDARD_STATE)
                     self.states[state.name] = state
                 #elif o.type.name == "UML - State Term" :
-                    # las propiedades son:[ 'obj_pos', 'obj_bb', 'elem_corner', 'elem_width', 'elem_height', 'is_final']
+                    # State Term properties are:
+                    # [ 'obj_pos',    'obj_bb',      'elem_corner',
+		    #   'elem_width', 'elem_height', 'is_final'     ]
                 elif o.type.name == "UML - Transition" :
-                    #las propiedades son: ['obj_pos', 'obj_bb', 'orth_points', 'orth_orient', 'orth_autoroute', 'trigger', 'action', 'guard', 'trigger_text_pos', 'guard_text_pos', 'direction_inverted']
+                    # Transition properties are:
+                    # [ 'obj_pos',          'obj_bb',         'orth_points',       'orth_orient',
+		    #   'orth_autoroute',   'trigger',        'action',            'guard',
+		    #   'trigger_text_pos', 'guard_text_pos', 'direction_inverted'                ]
                     transition = Transition()
                     source = o.handles[0].connected_to.object
                     target = o.handles[1].connected_to.object
@@ -93,16 +130,16 @@ class TxtDiagramRenderer:
                             transition.set_source("INITIAL_STATE")
                     elif source.type.name == "UML - State":
                         transition.set_source(source.properties["text"].value.text)
-		    else:
-                        transition.set_source("source unknown bullshit")
+                    else:
+                        transition.set_source("Unknown source")
 
                     if target.type.name ==  "UML - State Term":
                         if target.properties["is_final"].value :
                             transition.set_target("FINAL_STATE")
                     elif target.type.name == "UML - State":
                         transition.set_target(target.properties["text"].value.text)
-		    else:
-                        transition.set_source("target unknown bullshit")
+                    else:
+                        transition.set_source("Unknown target")
                     
                     try:
                         trigger = o.properties["trigger"].value
@@ -139,24 +176,42 @@ class TxtDiagramRenderer:
         self.states = {}
         self.transitions = []
 
-class CDiagramRenderer(TxtDiagramRenderer:):
-    def __init__(self):
-        pass
-                   
+class CDiagramRenderer(TxtDiagramRenderer):
+
     def end_render(self) :
         f = open(self.filename, "w")
         f.write("//\n")
-        f.write("// Machine generated file, do not edit!!!\n#Generated by sm_export.py script for DIA\n")
+        f.write("// Machine generated file, do not edit!!!\n")
+        f.write("// Generated by sm_export.py script for DIA\n")
         f.write("//\n")
         
-        f.write("\n// ------------ STATES\n")
+        f.write("\n// SETUP\n\n")
+        f.write("//\n")
+
+        f.write("// My_stateful_object_t my_statemachine;\n")
+        f.write("// Stateful_object_t* stm = (Stateful_object_t*) &my_statemachine;\n\n")
+
+        f.write("if( init_stateful_object(stm, \"Logger\") != ERR_OK) return ERR_FATAL;\n\n")
+
+        f.write("\n// STATES: 'state', 'action'\n")
+        f.write("//\n")
+
         for key in self.states.keys():
             state = self.states[key]
-            f.write("%s, %s, %s\n" % (state.name, state.iaction, state.oaction))
+            f.write("return_on_error( add_state( stm, %s, (stf)%s ));\n" % (state.name, state.doaction))
+            # (state.name, state.iaction, state.oaction, state.doaction)
 
-        f.write("\n// ------------ TRANSITIONS\n")
+        f.write("\n// TRANSITIONS: 'src state', 'trigger', 'target state'\n")
+        f.write("//\n")
         for transition in self.transitions:
-            f.write("%s, %s, %s, %s\n" % (transition.source, transition.target, transition.trigger, transition.action))
+            f.write("return_on_error( add_transition( stm, %s, %s, %s ));\n" %
+                                                          (transition.source,
+                                                           transition.trigger,
+                                                           transition.target ))
+        # (transition.source, transition.trigger, transition.target, transition.action))
+
+        # TODO: add_initial_state
+        #       add_universal_transition
         f.close()
         self.states = {}
         self.transitions = []
