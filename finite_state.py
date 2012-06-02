@@ -1,17 +1,32 @@
 # python script to export finite state machines
 #
+# Based on a script by Unai Esteban:
+#
 #     From: Unai Estebanez <unai unainet net>
 #     To: dia-list gnome org
 #     Subject: python script to export finite state machines
 #     Date: Tue, 7 Jul 2009 15:05:10 +0200
 #
-# Hi,
-# This is my script to export from a DIA UML state machine diagram to a neutral text format, later I use a program to convert from this neutra textl to a C language state machine.
-# Output of this script contents file format information.
-# I do not export the "do_action" because my C FSM(Finite State Machine) implementation does not support it but its really easy to add it.
-# Maybe this script will be usefull to someone:
+#     https://mail.gnome.org/archives/dia-list/2009-July/msg00005.html
 #
-# https://mail.gnome.org/archives/dia-list/2009-July/msg00005.html
+# Changes by Tomas Pospisek <tpo_deb@sourcepole.ch>
+#
+# Copyright (c) 2009-2012, Unai Estebanez, Tomas Pospisek
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 
 import dia
 
