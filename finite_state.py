@@ -242,7 +242,8 @@ configure_statemachine( Stateful_object_t* stm )
         for key in self.states.keys():
             state = self.states[key]
             # initial_state has already been output
-            if(state.name != initial_state.name):
+            # TODO: the fact that state can be None looks like a bug to me
+            if(state != None and state.name != initial_state.name):
                 f.write("    return_on_error( add_state( stm, %s, (stf)%s ));\n" %
                                                        (state.name, state.doaction))
                 # (state.name, state.iaction, state.oaction, state.doaction)
