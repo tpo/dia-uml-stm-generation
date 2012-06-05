@@ -1,6 +1,6 @@
 # Export finite state machines - base infrastructure.
 #
-# Based on a script by Unai Esteban:
+# Based on a script by Unai Estebanez Sevilla:
 #
 #     From: Unai Estebanez <unai unainet net>
 #     To: dia-list gnome org
@@ -11,7 +11,7 @@
 #
 # Changes by Tomas Pospisek <tpo_deb@sourcepole.ch>
 #
-# Copyright (c) 2009-2012, Unai Estebanez, Tomas Pospisek
+# Copyright (c) 2009-2012, Unai Estebanez Sevilla, Tomas Pospisek
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
