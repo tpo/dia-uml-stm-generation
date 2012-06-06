@@ -142,9 +142,9 @@ class SimpleSTM:
                 elif o.type.name == "UML - Transition" :
                     # Transition properties are:
                     # [ obj_pos,        obj_bb,         orth_points,
-		    #   orth_orient,    orth_autoroute, trigger,
-		    #   action,         guard,          trigger_text_pos,
-		    #   guard_text_pos, direction_inverted                ]
+                    #   orth_orient,    orth_autoroute, trigger,
+                    #   action,         guard,          trigger_text_pos,
+                    #   guard_text_pos, direction_inverted                ]
                     transition = Transition()
                     source = o.handles[0].connected_to.object
                     target = o.handles[1].connected_to.object
