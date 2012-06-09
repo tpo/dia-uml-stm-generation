@@ -71,7 +71,6 @@ void configure_statemachine( State_machine_t* stm )
         f.write(self.TRANSITIONS_PREAMBLE)
 
         for transition in self.transitions:
-            # specialcase UNIVERSAL - this is a transition that's valid for all states
             if(transition.source == "INITIAL_STATE"):
                 continue # skip the initial state transition
             f.write("    add_transition( stm, %s, %s, %s );\n" %
