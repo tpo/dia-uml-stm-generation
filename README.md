@@ -12,4 +12,7 @@ You need to copy those plugins to ~/.dia/python and will
 then be able to generate code via
 File->Export->*the respective plugin*
 
+There's a blog post explaining the code of the plugins
+[here](http://sourcepole.ch/2012/6/5/generating-state-machines-with-dia).
+
 Tomas Pospisek, <tpo_deb@sourcepole.ch>
