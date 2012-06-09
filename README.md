@@ -13,6 +13,6 @@ then be able to generate code via
 File->Export->*the respective plugin*
 
 There's a blog post explaining the code of the plugins
-[here](http://sourcepole.ch/2012/6/5/generating-state-machines-with-dia).
+[here](http://sourcepole.ch/2012/6/7/generating-state-machines-with-dia).
 
 Tomas Pospisek, <tpo_deb@sourcepole.ch>
